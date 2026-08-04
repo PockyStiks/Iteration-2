@@ -8,6 +8,7 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
+    private Player _player;
 
     public Game1()
     {
@@ -18,7 +19,7 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        // TODO: Add your initialization logic here
+        _player = new Player();
 
         base.Initialize();
     }
@@ -26,8 +27,8 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-        // TODO: use this.Content to load your game content here
+        
+        _player.LoadContent(GraphicsDevice);
     }
 
     protected override void Update(GameTime gameTime)
@@ -36,7 +37,7 @@ public class Game1 : Game
             Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
 
-        // TODO: Add your update logic here
+        _player.Update(gameTime);
 
         base.Update(gameTime);
     }
@@ -45,8 +46,10 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
 
-        // TODO: Add your drawing code here
-
+        _spriteBatch.Begin();
+        _player.Draw(_spriteBatch);
+        _spriteBatch.End();
+        
         base.Draw(gameTime);
     }
 }
