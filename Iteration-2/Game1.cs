@@ -6,9 +6,11 @@ namespace Iteration_2;
 
 public class Game1 : Game
 {
+    public static Texture2D PixelTexture { get; private set; } 
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private Player _player;
+    private Grid _grid;
 
     public Game1()
     {
@@ -20,15 +22,15 @@ public class Game1 : Game
     protected override void Initialize()
     {
         _player = new Player();
-
+        _grid = new Grid(100, 100);
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        
-        _player.LoadContent(GraphicsDevice);
+        PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
+        PixelTexture.SetData(new[] { Color.White });
     }
 
     protected override void Update(GameTime gameTime)
@@ -38,18 +40,16 @@ public class Game1 : Game
             Exit();
 
         _player.Update(gameTime);
-
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
-
         _spriteBatch.Begin();
+        _grid.Draw(_spriteBatch);
         _player.Draw(_spriteBatch);
         _spriteBatch.End();
-        
         base.Draw(gameTime);
     }
 }

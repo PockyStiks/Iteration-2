@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -7,13 +6,8 @@ namespace Iteration_2;
 
 public class Player
 {
-    private Vector2 _position =  Vector2.Zero;
-    public Vector2 Position => _position;
-    
-    private float _speed = 100f;
-    public float Speed => _speed;
-    
-    private Texture2D _texture;
+    public Vector2 Position { get; private set; } = new Vector2(100, 100);
+    public float Speed { get; set; } = 100f;
 
     public void Update(GameTime gameTime)
     {
@@ -24,7 +18,7 @@ public class Player
     public void Move(Vector2 direction, GameTime gameTime)
     {
         float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        _position += direction * _speed * deltaTime;
+        Position += direction * Speed * deltaTime;
     }
 
     public Vector2 GetMovementInput()
@@ -41,23 +35,15 @@ public class Player
         return direction;
     }
 
-    public void LoadContent(GraphicsDevice graphicsDevice)
-    {
-        _texture = new Texture2D(graphicsDevice, 1, 1);
-        _texture.SetData(new[] { Color.White });
-
-        _position = new Vector2(100, 100);
-    }
-    
     public void Draw(SpriteBatch spriteBatch)
     {
         spriteBatch.Draw(
-            _texture,
+            Game1.PixelTexture,
             new Rectangle(
-                (int)_position.X, 
-                (int)_position.Y,
-                50, 
-                50
+                (int)Position.X, 
+                (int)Position.Y,
+                32, 
+                32
             ), 
             Color.Red
         );
