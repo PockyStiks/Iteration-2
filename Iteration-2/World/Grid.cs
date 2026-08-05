@@ -32,6 +32,20 @@ public class Grid
             }
         }
     }
+    
+    public static Vector2 GridToWorld(Vector2 gridPos)
+    {
+        return new Vector2(
+            gridPos.X * Grid.TileSize,
+            gridPos.Y * Grid.TileSize);
+    }
+
+    public static Vector2 WorldToGrid(Vector2 worldPos)
+    {
+        return new Vector2(
+            (int)(worldPos.X / Grid.TileSize),
+            (int)(worldPos.Y / Grid.TileSize));
+    }
 
     public void Draw(SpriteBatch spriteBatch)
     {

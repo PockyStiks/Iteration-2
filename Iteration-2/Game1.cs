@@ -11,6 +11,7 @@ public class Game1 : Game
     private SpriteBatch _spriteBatch;
     private Player _player;
     private Grid _grid;
+    private Camera _camera;
 
     public Game1()
     {
@@ -21,8 +22,10 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        _player = new Player();
         _grid = new Grid(100, 100);
+        Vector2 spawnPos = new Vector2(50, 50);
+        _player = new Player(Grid.GridToWorld(spawnPos));
+        _camera = new Camera(GraphicsDevice.Viewport);
         base.Initialize();
     }
 
@@ -40,13 +43,14 @@ public class Game1 : Game
             Exit();
 
         _player.Update(gameTime);
+        _camera.Update(gameTime, _player.Position);
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
-        _spriteBatch.Begin();
+        _spriteBatch.Begin(transformMatrix: _camera.View);
         _grid.Draw(_spriteBatch);
         _player.Draw(_spriteBatch);
         _spriteBatch.End();

@@ -6,8 +6,13 @@ namespace Iteration_2;
 
 public class Player
 {
-    public Vector2 Position { get; private set; } = new Vector2(100, 100);
+    public Vector2 Position { get; set; }
     public float Speed { get; set; } = 100f;
+
+    public Player(Vector2 position)
+    {
+       Position = position; 
+    }
 
     public void Update(GameTime gameTime)
     {
