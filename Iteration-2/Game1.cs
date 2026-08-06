@@ -10,7 +10,7 @@ public class Game1 : Game
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
     private Player _player;
-    private Grid _grid;
+    private World _world;
     private Camera _camera;
 
     public Game1()
@@ -22,10 +22,10 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        _grid = new Grid(100, 100);
-        Vector2 spawnPos = new Vector2(50, 50);
-        _player = new Player(Grid.GridToWorld(spawnPos));
-        _camera = new Camera(GraphicsDevice.Viewport);
+        _world = new World(100, 100);
+        Vector2 spawnPosition = World.GridToWorld(new Vector2(50, 50));
+        _player = new Player(spawnPosition);
+        _camera = new Camera(GraphicsDevice.Viewport, spawnPosition);
         base.Initialize();
     }
 
@@ -38,10 +38,6 @@ public class Game1 : Game
 
     protected override void Update(GameTime gameTime)
     {
-        if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed ||
-            Keyboard.GetState().IsKeyDown(Keys.Escape))
-            Exit();
-
         _player.Update(gameTime);
         _camera.Update(gameTime, _player.Position);
         base.Update(gameTime);
@@ -51,7 +47,7 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
         _spriteBatch.Begin(transformMatrix: _camera.View);
-        _grid.Draw(_spriteBatch);
+        _world.Draw(_spriteBatch);
         _player.Draw(_spriteBatch);
         _spriteBatch.End();
         base.Draw(gameTime);
