@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -18,9 +17,10 @@ public class Camera
         Matrix.CreateScale(Zoom, Zoom, 1f) *
         Matrix.CreateTranslation(new Vector3(_viewport.Width * 0.5f, _viewport.Height * 0.5f, 0f)); 
     
-    public Camera(Viewport viewport)
+    public Camera(Viewport viewport, Vector2 position)
     {
         _viewport = viewport;
+        Position = position;
     }
 
     public void Update(GameTime gameTime, Vector2 targetPosition)

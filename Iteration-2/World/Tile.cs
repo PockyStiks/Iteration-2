@@ -6,11 +6,15 @@ namespace Iteration_2;
 
 public class Tile
 {
-    public bool Walkable { get; set; } = true;
+    public const int TileSize = 32;
+    public TerrainType TerrainType { get; set; } =  TerrainType.Dirt;
+    public OreType OreType { get; set; }
+    public string Name { get; set; }
     public Color Color { get; set; }
 
-    public Tile(Color color)
+    public Tile()
     {
-        Color = color;
+        Name = TerrainType.Name;
+        Color = TerrainType.Color;
     }
 }
