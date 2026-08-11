@@ -29,13 +29,16 @@ public class Chunk
        {
            for (int y = 0; y < ChunkSize; y++)
            {
+               Point globalTilePosition = World.ChunkToGlobalTile(ChunkPosition, new Point(x, y));
+               Vector2 worldPosition = World.GlobalTileToWorld(globalTilePosition); 
+               
                spriteBatch.Draw(
                    Game1.PixelTexture,
                    new Rectangle(
-                       x * ChunkSize,
-                       y * ChunkSize,
-                       ChunkSize,
-                       ChunkSize
+                       (int)worldPosition.X,
+                       (int)worldPosition.Y, 
+                       Tile.TileSize,
+                       Tile.TileSize
                    ),
                    _tiles[x, y].Color
                );

@@ -3,18 +3,45 @@ using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Iteration_2.Utils;
 
 namespace Iteration_2;
 
 public class World
 {
     private readonly Dictionary<Point, Chunk> _chunks = new();
-    private Point[] _chunksToLoad = new Point[9];
+    private readonly Point[] _chunksToLoad = new Point[9];
+    private readonly FastNoiseLite _noise;
+    
+    public World()
+    {
+        _noise = new FastNoiseLite();
+        _noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+    }
+    
+    private static OreType SelectOreType(Random random)
+    {
+        int totalWeight = 0;
 
-    // public static void GenerateChunk(Point position)
-    // {
-    // }
+        foreach (OreType ore in OreType.All)
+            totalWeight += ore.SpawnWeight;
+
+        int roll = random.Next(totalWeight);
+
+        foreach (OreType ore in OreType.All)
+        {
+            if (roll < ore.SpawnWeight)
+                return ore;
+
+            roll -= ore.SpawnWeight;
+        }
+
+        throw new InvalidOperationException("No ore could be selected.");
+    }
+    
+    public static void GenerateChunk(Point chunkPosition)
+    {
+        Chunk chunk = new Chunk(chunkPosition);
+    }
 
     public static Point WorldToGlobalTile(Vector2 worldPosition)
     {
@@ -47,12 +74,20 @@ public class World
             MathUtils.Mod(globalTilePosition.Y, Chunk.ChunkSize)
         );
     }
+    
+    public static Point ChunkToGlobalTile(Point chunkPosition, Point localTilePosition)
+    {
+        return new Point(
+            chunkPosition.X * Chunk.ChunkSize + localTilePosition.X,
+            chunkPosition.Y * Chunk.ChunkSize + localTilePosition.Y
+        );
+    }
 
     public void Update(Vector2 playerPosition)
     {
         Point playerTile =  WorldToGlobalTile(playerPosition);
         Point playerChunk = GlobalTileToChunk(playerTile);
-        Console.WriteLine(_chunksToLoad[0]);
+        Console.WriteLine(playerChunk);
         int index = 0;
         for (int i = -1; i <= 1; i++)
         {

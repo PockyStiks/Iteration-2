@@ -1,6 +1,6 @@
 using System;
 
-namespace Iteration_2.Utils;
+namespace Iteration_2;
 
 public class MathUtils
 {
