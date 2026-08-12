@@ -2,30 +2,32 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Iteration_2;
 
 public class World
 {
+    public const int Seed = 42;
+    public static readonly Random Random = new(Seed);
     private readonly Dictionary<Point, Chunk> _chunks = new();
     private readonly Point[] _chunksToLoad = new Point[9];
-    private readonly FastNoiseLite _noise;
+    private readonly FastNoiseLite _noiseGenerator;
     
     public World()
     {
-        _noise = new FastNoiseLite();
-        _noise.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+        _noiseGenerator = new FastNoiseLite();
+        _noiseGenerator.SetNoiseType(FastNoiseLite.NoiseType.OpenSimplex2);
+        _noiseGenerator.SetFrequency(0.015f);
     }
     
-    private static OreType SelectOreType(Random random)
+    private OreType SelectOreType()
     {
         int totalWeight = 0;
 
         foreach (OreType ore in OreType.All)
             totalWeight += ore.SpawnWeight;
 
-        int roll = random.Next(totalWeight);
+        int roll = World.Random.Next(totalWeight);
 
         foreach (OreType ore in OreType.All)
         {
@@ -38,9 +40,25 @@ public class World
         throw new InvalidOperationException("No ore could be selected.");
     }
     
-    public static void GenerateChunk(Point chunkPosition)
+    private void GenerateChunk(Point chunkPosition)
     {
+        OreType ore = SelectOreType();
         Chunk chunk = new Chunk(chunkPosition);
+        
+        for (int x = 0; x < Chunk.ChunkSize; x++)
+        {
+            for (int y = 0; y < Chunk.ChunkSize; y++)
+            {
+                Point globalTilePosition = ChunkToGlobalTile(chunkPosition, new Point(x, y));
+                float noise = _noiseGenerator.GetNoise(globalTilePosition.X, globalTilePosition.Y);
+
+                if (noise >= 0.6f)
+                {
+                    chunk.GetTile(globalTilePosition).SetOre(ore);
+                }
+            }
+        }
+        _chunks[chunkPosition] = chunk;
     }
 
     public static Point WorldToGlobalTile(Vector2 worldPosition)
@@ -87,7 +105,6 @@ public class World
     {
         Point playerTile =  WorldToGlobalTile(playerPosition);
         Point playerChunk = GlobalTileToChunk(playerTile);
-        Console.WriteLine(playerChunk);
         int index = 0;
         for (int i = -1; i <= 1; i++)
         {
@@ -96,7 +113,7 @@ public class World
                 _chunksToLoad[index] = new Point(playerChunk.X + i, playerChunk.Y + j);
                 if (!_chunks.ContainsKey(_chunksToLoad[index]))
                 {
-                    _chunks[_chunksToLoad[index]] = new Chunk(_chunksToLoad[index]);
+                    GenerateChunk(_chunksToLoad[index]);
                 }
 
                 index++;

@@ -23,6 +23,12 @@ public class Chunk
        }
     }
 
+    public Tile GetTile(Point globalTilePosition)
+    {
+        Point localTilePosition = World.GlobalTileToLocalTile(globalTilePosition);
+        return _tiles[localTilePosition.X, localTilePosition.Y];
+    }
+
     public void Draw(SpriteBatch spriteBatch)
     {
        for (int x = 0; x < ChunkSize; x++)
