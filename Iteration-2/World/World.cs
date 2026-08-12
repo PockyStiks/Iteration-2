@@ -2,6 +2,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Iteration_2;
 
@@ -22,36 +23,32 @@ public class World
     
     private OreType SelectOreType()
     {
-        int totalWeight = 0;
-
-        foreach (OreType ore in OreType.All)
-            totalWeight += ore.SpawnWeight;
-
-        int roll = World.Random.Next(totalWeight);
-
-        foreach (OreType ore in OreType.All)
-        {
-            if (roll < ore.SpawnWeight)
-                return ore;
-
-            roll -= ore.SpawnWeight;
-        }
-
-        throw new InvalidOperationException("No ore could be selected.");
+        float copper = _copperNoise.GetNoise(globalPosition.X, globalPosition.Y);
+        float iron = _ironNoise.GetNoise(globalPosition.X, globalPosition.Y);
+        float gold = _goldNoise.GetNoise(globalPosition.X, globalPosition.Y);
     }
     
     private void GenerateChunk(Point chunkPosition)
     {
-        OreType ore = SelectOreType();
         Chunk chunk = new Chunk(chunkPosition);
+        Dictionary<OreType, float> oreNoise = new();
         
         for (int x = 0; x < Chunk.ChunkSize; x++)
         {
             for (int y = 0; y < Chunk.ChunkSize; y++)
             {
                 Point globalTilePosition = ChunkToGlobalTile(chunkPosition, new Point(x, y));
-                float noise = _noiseGenerator.GetNoise(globalTilePosition.X, globalTilePosition.Y);
 
+                for (int i = 0; i < OreType.All.Length; i++)
+                {
+                    float noise = _noiseGenerator.GetNoise(globalTilePosition.X, globalTilePosition.Y);
+                    oreNoise[OreType.All[i]] = noise;
+                }
+                    
+                KeyValuePair<OreType, float> best = oreNoise.MaxBy(x => x.Value);
+                OreType ore = best.Key;
+                float score = best.Value;
+                
                 if (noise >= 0.6f)
                 {
                     chunk.GetTile(globalTilePosition).SetOre(ore);
