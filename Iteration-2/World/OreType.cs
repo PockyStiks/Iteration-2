@@ -24,5 +24,6 @@ public sealed class OreType
     {
         Name = name;
         Color = color;
+        SpawnWeight = spawnWeight;
     }
 }
