@@ -6,7 +6,7 @@ namespace Iteration_2;
 public class Camera
 {
     public Vector2 Position { get; set; }
-    public float Zoom { get; set; } = 0.3f;
+    public float Zoom { get; set; } = 0.8f;
     public float Rotation { get; set; } = 0f;
     public float FollowSpeed { get; set; } = 8f;
     private Viewport _viewport;

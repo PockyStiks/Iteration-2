@@ -7,7 +7,7 @@ namespace Iteration_2;
 public class Player
 {
     public Vector2 Position { get; set; }
-    public float Speed { get; set; } = 400f;
+    public float Speed { get; set; } = 200f;
 
     public Player(Vector2 position)
     {
