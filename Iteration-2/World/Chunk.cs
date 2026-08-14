@@ -39,7 +39,7 @@ public class Chunk
                Vector2 worldPosition = World.GlobalTileToWorld(globalTilePosition); 
                
                spriteBatch.Draw(
-                   Game1.PixelTexture,
+                   GameAssets.Ground,
                    new Rectangle(
                        (int)worldPosition.X,
                        (int)worldPosition.Y, 

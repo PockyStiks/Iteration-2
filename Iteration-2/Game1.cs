@@ -1,6 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Iteration_2;
 
@@ -32,6 +31,7 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
+        GameAssets.LoadAssets(Content);
         PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
         PixelTexture.SetData(new[] { Color.White });
     }

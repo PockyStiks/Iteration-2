@@ -4,7 +4,7 @@ namespace Iteration_2;
 
 public sealed class Ore
 {
-    public static readonly Ore None = new("None", new Color(101, 67, 33), 0f, 0f);
+    public static readonly Ore None = new("None", new Color(255, 255, 255), 0f, 0f);
     public static readonly Ore Copper = new("Copper", new Color(203, 109, 81), 0.8f, 0.015f);
     public static readonly Ore Iron = new("Iron", new Color(161, 157, 148), 0.9f, 0.018f);
     public static readonly Ore Gold = new("Gold", new Color(255, 215, 0), 0.98f, 0.02f);
