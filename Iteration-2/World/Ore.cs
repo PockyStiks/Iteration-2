@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Iteration_2;
@@ -10,12 +9,7 @@ public sealed class Ore
     public static readonly Ore Iron = new("Iron", GameAssets.Iron, 0.9f, 0.018f);
     public static readonly Ore Gold = new("Gold", GameAssets.Gold, 0.98f, 0.02f);
     
-    public static readonly Ore[] All =
-    {
-        Copper,
-        Iron,
-        Gold
-    };
+    public static readonly Ore[] All = { Copper, Iron, Gold };
     
     public string Name { get; }
     public Texture2D? Texture { get; }
