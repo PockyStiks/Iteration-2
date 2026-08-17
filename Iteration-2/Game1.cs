@@ -47,7 +47,7 @@ public class Game1 : Game
     protected override void Draw(GameTime gameTime)
     {
         GraphicsDevice.Clear(Color.Black);
-        _spriteBatch.Begin(transformMatrix: _camera.View);
+        _spriteBatch.Begin(transformMatrix: _camera.View, samplerState: SamplerState.PointClamp);
         _world.Draw(_spriteBatch);
         _player.Draw(_spriteBatch);
         _spriteBatch.End();
