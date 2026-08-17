@@ -23,7 +23,7 @@ public class AnimationPlayer
 
     public void Update(GameTime gameTime)
     {
-        if (_animation == null)
+        if (_animation == null || _animation.Frames.Length < 2)
             return;
 
         _timer += (float)gameTime.ElapsedGameTime.TotalSeconds;
@@ -33,4 +33,5 @@ public class AnimationPlayer
             _timer -= _animation.FrameDuration;
             _frame = (_frame + 1) % _animation.Frames.Length;
         }
-    }}
+    }
+}

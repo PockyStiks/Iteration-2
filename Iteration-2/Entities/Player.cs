@@ -1,32 +1,78 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Iteration_2;
 
 public class Player
 {
-    public Vector2 Position { get; set; }
-    public float Speed { get; set; } = 200f;
+    public Vector2 Position { get; private set; }
+    public float Speed { get; private set; } = 100f;
 
+    private readonly AnimationPlayer _animationPlayer = new();
+    
+    private readonly Animation _walkDown;
+    private readonly Animation _walkUp;
+    private readonly Animation _walkLeft;
+    private readonly Animation _walkRight;
+    
+    private readonly Animation _idleDown;
+    private readonly Animation _idleUp;
+    private readonly Animation _idleLeft;
+    private readonly Animation _idleRight;
+    
+    private enum Direction
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
+    private Direction _facingDirection = Direction.Down;
+    private float _walkAnimationSpeed = 20f;
+    
     public Player(Vector2 position)
     {
-       Position = position; 
+       Position = position;
+
+       float walkAnimationSpeed = _walkAnimationSpeed / Speed;
+       _walkDown = new Animation(
+           [
+               new Rectangle(0, 0, 32, 32),
+               new Rectangle(0, 32, 32, 32),
+               new Rectangle(0, 64, 32, 32),
+               new Rectangle(0, 32, 32, 32),
+           ],
+           walkAnimationSpeed);
+       
+       _walkUp = new Animation(
+           [
+               new Rectangle(64, 0, 32, 32),
+               new Rectangle(64, 32, 32, 32),
+               new Rectangle(64, 64, 32, 32),
+               new Rectangle(64, 32, 32, 32),
+           ],
+           walkAnimationSpeed);
+       
+       _walkRight = new Animation(
+           [
+               new Rectangle(32, 0, 32, 32),
+               new Rectangle(32, 32, 32, 32),
+               new Rectangle(32, 64, 32, 32),
+               new Rectangle(32, 32, 32, 32),
+           ],
+           walkAnimationSpeed);
+
+       _idleDown = new Animation( [ new Rectangle(0, 32, 32, 32) ], walkAnimationSpeed);
+       _idleUp = new Animation( [ new Rectangle(64, 32, 32, 32) ], walkAnimationSpeed);
+       _idleRight = new Animation( [ new Rectangle(32, 32, 32, 32) ], walkAnimationSpeed);
+       
+       _walkLeft = _walkRight;
+       _idleLeft = _idleRight;
     }
 
-    public void Update(GameTime gameTime)
-    {
-       Vector2 direction = GetMovementInput();
-       Move(direction, gameTime); 
-    }
-
-    public void Move(Vector2 direction, GameTime gameTime)
-    {
-        float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-        Position += direction * Speed * deltaTime;
-    }
-
-    public Vector2 GetMovementInput()
+    private Vector2 GetMovementInput()
     {
         Vector2 direction = Vector2.Zero;
         KeyboardState newState = Keyboard.GetState();
@@ -37,20 +83,64 @@ public class Player
         if (newState.IsKeyDown(Keys.D)) direction.X++;
        
         if (direction != Vector2.Zero) direction.Normalize();
+        
         return direction;
+    }
+
+    private void Move(Vector2 direction, GameTime gameTime)
+    {
+        float deltaTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
+        Position += direction * Speed * deltaTime;
+    }
+
+    private Animation GetAnimation(Direction direction, bool walking)
+    {
+        return direction switch
+        {
+            Direction.Up => walking ? _walkUp : _idleUp,
+            Direction.Down => walking ? _walkDown : _idleDown,
+            Direction.Left => walking ? _walkLeft : _idleLeft,
+            Direction.Right => walking ? _walkRight : _idleRight,
+            _ => throw new ArgumentOutOfRangeException()
+        };
+    }
+    
+    private void UpdateAnimation(Vector2 movement)
+    {
+        if (movement != Vector2.Zero)
+        {
+            if (Math.Abs(movement.X) >= Math.Abs(movement.Y))
+                _facingDirection = movement.X > 0 ? Direction.Right : Direction.Left;
+            else
+                _facingDirection = movement.Y > 0 ? Direction.Down : Direction.Up;
+        }
+
+        _animationPlayer.Play(GetAnimation(_facingDirection, movement != Vector2.Zero));
+    }
+
+    public void Update(GameTime gameTime)
+    {
+       Vector2 direction = GetMovementInput();
+       Move(direction, gameTime); 
+       UpdateAnimation(direction);
+       _animationPlayer.Update(gameTime);
     }
 
     public void Draw(SpriteBatch spriteBatch)
     {
+        SpriteEffects effects = _facingDirection == Direction.Left ? 
+            SpriteEffects.FlipHorizontally : SpriteEffects.None;
+        
         spriteBatch.Draw(
-            Game1.PixelTexture,
-            new Rectangle(
-                (int)Position.X, 
-                (int)Position.Y,
-                32, 
-                32
-            ), 
-            Color.Red
+            GameAssets.PlayerWalk,
+            Position,
+            _animationPlayer.CurrentFrame,
+            Color.White,
+            0f,
+            Vector2.Zero,
+            1f,
+            effects,
+            0f
         );
     }
 }
