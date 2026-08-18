@@ -39,26 +39,28 @@ public class Chunk
                Vector2 worldPosition = World.GlobalTileToWorld(globalTilePosition); 
                
                spriteBatch.Draw(
-                   _tiles[x, y].Texture,
+                   SpriteAtlas.SpriteSheet,
                    new Rectangle(
                        (int)worldPosition.X,
                        (int)worldPosition.Y, 
                        Tile.TileSize,
                        Tile.TileSize
                    ),
+                   SpriteAtlas.Ground,
                    Color.White
                );
 
                if (_tiles[x, y].Ore != Ore.None)
                {
                    spriteBatch.Draw(
-                       _tiles[x, y].Ore.Texture,
+                       SpriteAtlas.SpriteSheet,
                        new Rectangle(
                            (int)worldPosition.X,
                            (int)worldPosition.Y,
                            Tile.TileSize,
                            Tile.TileSize
                        ),
+                       _tiles[x, y].Ore.Texture,
                        Color.White
                    );
                }

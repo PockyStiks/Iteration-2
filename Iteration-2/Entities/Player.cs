@@ -39,34 +39,34 @@ public class Player
        float walkAnimationSpeed = _walkAnimationSpeed / Speed;
        _walkDown = new Animation(
            [
-               new Rectangle(0, 0, 32, 32),
-               new Rectangle(0, 32, 32, 32),
-               new Rectangle(0, 64, 32, 32),
-               new Rectangle(0, 32, 32, 32),
+               SpriteAtlas.PlayerWalkDownRightFoot,
+               SpriteAtlas.PlayerStandDown,
+               SpriteAtlas.PlayerWalkDownLeftFoot,
+               SpriteAtlas.PlayerStandDown
            ],
            walkAnimationSpeed);
        
        _walkUp = new Animation(
            [
-               new Rectangle(64, 0, 32, 32),
-               new Rectangle(64, 32, 32, 32),
-               new Rectangle(64, 64, 32, 32),
-               new Rectangle(64, 32, 32, 32),
+               SpriteAtlas.PlayerWalkUpRightFoot,
+               SpriteAtlas.PlayerStandUp,
+               SpriteAtlas.PlayerWalkUpLeftFoot,
+               SpriteAtlas.PlayerStandUp
            ],
            walkAnimationSpeed);
        
        _walkRight = new Animation(
            [
-               new Rectangle(32, 0, 32, 32),
-               new Rectangle(32, 32, 32, 32),
-               new Rectangle(32, 64, 32, 32),
-               new Rectangle(32, 32, 32, 32),
+               SpriteAtlas.PlayerWalkRightRightFoot,
+               SpriteAtlas.PlayerStandRight,
+               SpriteAtlas.PlayerWalkRightLeftFoot,
+               SpriteAtlas.PlayerStandRight
            ],
            walkAnimationSpeed);
 
-       _idleDown = new Animation( [ new Rectangle(0, 32, 32, 32) ], walkAnimationSpeed);
-       _idleUp = new Animation( [ new Rectangle(64, 32, 32, 32) ], walkAnimationSpeed);
-       _idleRight = new Animation( [ new Rectangle(32, 32, 32, 32) ], walkAnimationSpeed);
+       _idleDown = new Animation( [ SpriteAtlas.PlayerStandDown ], walkAnimationSpeed);
+       _idleUp = new Animation( [ SpriteAtlas.PlayerStandUp ], walkAnimationSpeed);
+       _idleRight = new Animation( [ SpriteAtlas.PlayerStandRight ], walkAnimationSpeed);
        
        _walkLeft = _walkRight;
        _idleLeft = _idleRight;
@@ -132,7 +132,7 @@ public class Player
             SpriteEffects.FlipHorizontally : SpriteEffects.None;
         
         spriteBatch.Draw(
-            GameAssets.PlayerWalk,
+            SpriteAtlas.SpriteSheet,
             Position,
             _animationPlayer.CurrentFrame,
             Color.White,

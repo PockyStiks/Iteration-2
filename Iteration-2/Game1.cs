@@ -31,7 +31,7 @@ public class Game1 : Game
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        GameAssets.LoadAssets(Content);
+        SpriteAtlas.LoadAssets(Content);
         PixelTexture = new Texture2D(GraphicsDevice, 1, 1);
         PixelTexture.SetData(new[] { Color.White });
     }
