@@ -11,4 +11,5 @@ public class Animation
     {
         Frames = frames;
         FrameDuration = frameDuration;
-    }}
+    }
+}
