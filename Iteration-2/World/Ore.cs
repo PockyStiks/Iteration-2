@@ -1,4 +1,3 @@
-using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
 namespace Iteration_2;
