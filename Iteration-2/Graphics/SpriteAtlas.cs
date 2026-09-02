@@ -12,7 +12,7 @@ public class SpriteAtlas
     public static readonly Rectangle Copper = new(32, 0, 32, 32);
     public static readonly Rectangle Gold = new(64, 0, 32, 32);
     public static readonly Rectangle Iron = new(96, 0, 32, 32);
-    public static readonly Rectangle CraterBig = new(128, 0, 32, 32);
+    public static readonly Rectangle CraterLarge = new(128, 0, 32, 32);
     public static readonly Rectangle CraterSmall = new(160, 0, 32, 32);
     public static readonly Rectangle CraterMultiple = new(192, 0, 32, 32);
     public static readonly Rectangle PlayerWalkDownRightFoot = new(224, 0, 32, 32);

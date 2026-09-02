@@ -64,6 +64,20 @@ public class Chunk
                        Color.White
                    );
                }
+               else if (_tiles[x, y].Crater != Crater.None)
+               {
+                   spriteBatch.Draw(
+                       SpriteAtlas.SpriteSheet,
+                       new Rectangle(
+                           (int)worldPosition.X,
+                           (int)worldPosition.Y,
+                           Tile.TileSize,
+                           Tile.TileSize
+                       ),
+                       _tiles[x, y].Crater.Texture,
+                       Color.White
+                   );
+               }
            }
        }
     }
