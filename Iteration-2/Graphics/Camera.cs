@@ -1,5 +1,4 @@
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 
 namespace Iteration_2;
 
@@ -9,17 +8,20 @@ public class Camera
     public float Zoom { get; set; } = 2f;
     public float Rotation { get; set; } = 0f;
     public float FollowSpeed { get; set; } = 8f;
-    private Viewport _viewport;
-    
-    public Matrix View => 
-        Matrix.CreateTranslation(new Vector3(-Position, 0)) * 
+
+    private readonly int _virtualWidth;
+    private readonly int _virtualHeight;
+
+    public Matrix View =>
+        Matrix.CreateTranslation(new Vector3(-Position, 0)) *
         Matrix.CreateRotationZ(Rotation) *
         Matrix.CreateScale(Zoom, Zoom, 1f) *
-        Matrix.CreateTranslation(new Vector3(_viewport.Width * 0.5f, _viewport.Height * 0.5f, 0f)); 
-    
-    public Camera(Viewport viewport, Vector2 position)
+        Matrix.CreateTranslation(new Vector3(_virtualWidth * 0.5f, _virtualHeight * 0.5f, 0f));
+
+    public Camera(int virtualWidth, int virtualHeight, Vector2 position)
     {
-        _viewport = viewport;
+        _virtualWidth = virtualWidth;
+        _virtualHeight = virtualHeight;
         Position = position;
     }
 
