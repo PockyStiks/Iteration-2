@@ -15,8 +15,9 @@ public class Game1 : Game
     private Camera _camera;
     private RenderTarget2D _renderTarget;
     
-    private const int VirtualWidth = 960;
-    private const int VirtualHeight = 540;
+    public const int VirtualWidth = 960;
+    public const int VirtualHeight = 540;
+    public static Rectangle DestRect { get; private set; }
 
     public Game1()
     {
@@ -75,29 +76,12 @@ public class Game1 : Game
         GraphicsDevice.SetRenderTarget(null);
         GraphicsDevice.Clear(Color.Black);
 
-        Rectangle destRect = GetScaledDestinationRectangle();
+        DestRect = MathUtils.GetScaledDestinationRectangle(GraphicsDevice, VirtualHeight, VirtualWidth);
         
         _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        _spriteBatch.Draw(_renderTarget, destRect, Color.White);
+        _spriteBatch.Draw(_renderTarget, DestRect, Color.White);
         _spriteBatch.End();
         
         base.Draw(gameTime);
-    }
-    
-    private Rectangle GetScaledDestinationRectangle()
-    {
-        int windowWidth = GraphicsDevice.PresentationParameters.BackBufferWidth;
-        int windowHeight = GraphicsDevice.PresentationParameters.BackBufferHeight;
-
-        float scaleX = (float)windowWidth / VirtualWidth;
-        float scaleY = (float)windowHeight / VirtualHeight;
-        float scale = Math.Min(scaleX, scaleY);
-
-        int destWidth = (int)(VirtualWidth * scale);
-        int destHeight = (int)(VirtualHeight * scale);
-        int destX = (windowWidth - destWidth) / 2;
-        int destY = (windowHeight - destHeight) / 2;
-
-        return new Rectangle(destX, destY, destWidth, destHeight);
     }
 }
