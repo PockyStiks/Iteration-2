@@ -54,19 +54,12 @@ public class World
         );
     }
 
-    public static Point MouseToGlobalTile(int virtualWidth, int virtualHeight, Camera camera)
+    public static Point MouseToGlobalTile(Camera camera)
     {
         MouseState mouse = Mouse.GetState();
 
-        if (!Game1.DestRect.Contains(mouse.Position))
-            return new Point(-1, -1);
-        
-        float virtualX = (mouse.X - Game1.DestRect.X) * virtualWidth / (float)Game1.DestRect.Width;
-        float virtualY = (mouse.Y - Game1.DestRect.Y) * virtualHeight / (float)Game1.DestRect.Height;
-        Vector2 virtualPosition = new Vector2(virtualX, virtualY);
-
         Vector2 worldPosition = Vector2.Transform(
-            virtualPosition,
+            mouse.Position.ToVector2(),
             Matrix.Invert(camera.View)
         );
 

@@ -14,10 +14,6 @@ public class Game1 : Game
     private World _world;
     private Camera _camera;
     private RenderTarget2D _renderTarget;
-    
-    public const int VirtualWidth = 960;
-    public const int VirtualHeight = 540;
-    public static Rectangle DestRect { get; private set; }
 
     public Game1()
     {
@@ -28,17 +24,16 @@ public class Game1 : Game
 
     protected override void Initialize()
     {
-        _graphics.PreferredBackBufferWidth = GraphicsDevice.Adapter.CurrentDisplayMode.Width;
-        _graphics.PreferredBackBufferHeight = GraphicsDevice.Adapter.CurrentDisplayMode.Height;
         _graphics.IsFullScreen = true;
         _graphics.HardwareModeSwitch = false;
+        Window.AllowUserResizing = true;
         _graphics.ApplyChanges();
         
-        _renderTarget = new RenderTarget2D(GraphicsDevice, VirtualWidth, VirtualHeight);
-        _world = new World();
         Vector2 spawnPosition = Vector2.Zero;
+        
+        _world = new World();
         _player = new Player(spawnPosition);
-        _camera = new Camera(VirtualWidth, VirtualHeight, spawnPosition);
+        _camera = new Camera(GraphicsDevice, _player.Center);
         
         base.Initialize();
     }
@@ -57,29 +52,24 @@ public class Game1 : Game
             Exit();
         
         _player.Update(gameTime);
-        _camera.Update(gameTime, _player.Position);
+        _camera.Update(gameTime, _player.Center);
         _world.Update(_player.Position);
+
+        Point p = World.MouseToGlobalTile(_camera);
+        Console.WriteLine(p);
         
         base.Update(gameTime);
     }
 
     protected override void Draw(GameTime gameTime)
     {
-        GraphicsDevice.SetRenderTarget(_renderTarget);
         GraphicsDevice.Clear(Color.Black);
         
         _spriteBatch.Begin(transformMatrix: _camera.View, samplerState: SamplerState.PointClamp);
+        
         _world.Draw(_spriteBatch);
         _player.Draw(_spriteBatch);
-        _spriteBatch.End();
         
-        GraphicsDevice.SetRenderTarget(null);
-        GraphicsDevice.Clear(Color.Black);
-
-        DestRect = MathUtils.GetScaledDestinationRectangle(GraphicsDevice, VirtualHeight, VirtualWidth);
-        
-        _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
-        _spriteBatch.Draw(_renderTarget, DestRect, Color.White);
         _spriteBatch.End();
         
         base.Draw(gameTime);

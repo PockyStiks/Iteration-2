@@ -8,6 +8,7 @@ namespace Iteration_2;
 public class Player
 {
     public Vector2 Position { get; private set; }
+    public Vector2 Center => Position + new Vector2(32 / 2f, 32 / 2f);
     public float Speed { get; private set; } = 100f;
 
     private readonly AnimationPlayer _animationPlayer = new();
